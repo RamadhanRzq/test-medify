@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('master_items', function (Blueprint $table) {
-            $table->string('foto')->nullable();
+            $table->string('foto')->nullable()->after('supplier');
         });
     }
 

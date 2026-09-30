@@ -53,6 +53,11 @@
                     })
                     array_temp.push(harga_jual)
                     array_temp.push(item.supplier)
+                    var foto = item.foto
+                        ? `<img src="/storage/${item.foto}" width="60" height="60" style="object-fit: cover;">`
+                        : '-';
+                    
+                    array_temp.push(foto)
                     array_temp.push(html)
 
 
