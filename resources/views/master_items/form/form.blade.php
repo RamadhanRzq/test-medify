@@ -49,6 +49,39 @@
     </div>
 
     <div class="form-group">
+        <label>Kategori</label>
+        <label>Kategori</label>
+            @php
+                $selectedCategories = [];
+        
+                if (isset($item->categories)) {
+                    $selectedCategories = $item->categories
+                        ->pluck('id')
+                        ->toArray();
+                }
+            @endphp
+        
+            <select class="form-control"
+                    name="categories[]"
+                    multiple
+                    required>
+                @foreach($categories as $category)
+        
+                    <option value="{{ $category->id }}"
+                        @if(in_array($category->id, $selectedCategories))
+                            selected
+                        @endif>
+        
+                        {{ $category->kode }} - {{ $category->nama }}
+        
+                    </option>
+        
+                @endforeach
+        
+            </select>
+    </div>
+
+    <div class="form-group">
         <label>Foto</label>
         <input type="file" class="form-control" name="foto" accept="image/*">
     </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
+use App\Exports\MasterItemsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MasterItemsController extends Controller
 {
@@ -41,10 +44,11 @@ class MasterItemsController extends Controller
         if ($method == 'new') {
             $item = [];
         } else {
-            $item = MasterItem::find($id);
+            $item = MasterItem::with('categories')->find($id);
         }
         $data['item'] = $item;
         $data['method'] = $method;
+        $data['categories'] = Category::orderBy('nama')->get();
         return view('master_items.form.index', $data);
     }
 
@@ -84,6 +88,8 @@ class MasterItemsController extends Controller
         }
         $data_item->save();
 
+        $data_item->categories()->sync($request->categories ?? []);
+
         return redirect('master-items');
     }
 
@@ -122,5 +128,12 @@ class MasterItemsController extends Controller
         $array = ['Obat','Alkes','Matkes','Umum','ATK'];
         $random = rand(0,4);
         return $array[$random];
+    }
+    public function downloadExcel()
+    {
+        return Excel::download(
+            new MasterItemsExport,
+            'master-items.xlsx'
+        );
     }
 }
